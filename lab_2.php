@@ -55,13 +55,16 @@ class VanDongVien extends ConNguoi {
     
     function hienThiThongTin()
     {
-        echo "Tên: $this->ten <br>";
-        echo "Tuổi: $this->tuoi <br>"; 
-        echo "Giới tính: $this->gioiTinh <br> ";
-        echo "Ngày sinh: $this->ngaySinh <br> ";
-        echo "Cân nặng: $this->canNang kg <br>";
-        echo "Chiều cao: $this->chieuCao m<br>";
-        echo "Số huy chương: $this->soHuyChuong <br>";
+        return 
+        "
+        ----Thông tin vận động viên----<br>
+        Tên: $this->ten <br> 
+        Tuổi: $this->tuoi <br> 
+        Giới tính: $this->gioiTinh <br> 
+        Ngày sinh: $this->ngaySinh <br> 
+        Cân nặng: $this->canNang kg <br> 
+        Chiều cao: $this->chieuCao m<br> 
+        Số huy chương: $this->soHuyChuong <br>";
         echo "Các môn đã thi đấu: ";
         foreach ($this->cacMonDaThiDau as $cacMonDaThiDau => $value) {
             echo " <br> - $value";
@@ -69,34 +72,25 @@ class VanDongVien extends ConNguoi {
 
     }
     public function kiemTraCanNangChieuCao($monThiDau, $soHuyChuongSauKiemTra){
-        if($kiemTraCanNang = $this->canNang < $monThiDau->dieuKienCanNang){
-            false;
+        if($kiemTraCanNang = $this->canNang < $monThiDau->dieuKienCanNang||$kiemTraChieuCao = $this->chieuCao < $monThiDau->dieuKienChieuCao){
+            echo "<br>Không thỏa mãn điều kiện về chiều cao và cân nặng<br>";
+            $this->soHuyChuong -= $soHuyChuongSauKiemTra;
         }else{
-            true;
+            return "<br>Thỏa mãn điều kiện về chiều cao và cân nặng<br><br>";
         }
-        if($kiemTraChieuCao = $this->chieuCao < $monThiDau->dieuKienChieuCao){
-            false;
-        }else{
-            true;
-        }
-        
-        if ($kiemTraChieuCao && $kiemTraCanNang) {
-            $this->soHuyChuongSauKiemTra += $soHuyChuongSauKiemTra;
-            array_push($this->cacMonDaThiDau, $monThiDau->tenMTD);
-
-            return "<br>Thỏa mãn điều kiện về chiều cao và cân nặng<br>";
-        }
-        
-        $this->soHuyChuong -= $soHuyChuongSauKiemTra;
-        return "<br>Không thỏa mãn điều kiện về chiều cao và cân nặng<br>";
+        return "Số huy chương còn lại sau kiểm tra: $this->soHuyChuong";
     }
 }
 $cauThu_DVL = new VanDongVien("Đặng Văn Lâm",29,"Nam","8.13.1993",76,1.88,8,['Bóng đá','Thủ môn','AFC Cup']);
 $monThiDau = new MonThiDau('Bóng đá',1.65,60);
 echo $cauThu_DVL->hienThiThongTin();
 echo $cauThu_DVL->kiemTraCanNangChieuCao($monThiDau, 8);
+
+$cauThu_NVA = new VanDongVien("Nguyễn Văn A",26,"Nam","5.2.1996",56,1.5,8,['Bóng đá']);
+echo $cauThu_NVA->hienThiThongTin();
+echo $cauThu_NVA->kiemTraCanNangChieuCao($monThiDau, 5);
 class MonThiDau {
-    public $ten,$dieuKienChieuCao,$dieuKienCanNang;
+    public $tenMTD,$dieuKienChieuCao,$dieuKienCanNang;
     public function __construct($tenMTD,$dieuKienChieuCao,$dieuKienCanNang)
      {
           $this->tenMTD = $tenMTD;
